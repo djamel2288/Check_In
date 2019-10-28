@@ -300,6 +300,10 @@ public class Controller implements Initializable {
 
     /********************* Update Table View ***********************/
 
+    /*public void combo_event()
+    {
+        update_table();
+    }*/
 
     public void update_table()
     {
@@ -324,7 +328,7 @@ public class Controller implements Initializable {
 
                 st = conn.createStatement();
                 rs = st.executeQuery(req);
-
+                oblist.clear();
                 while (rs.next())
                 {
                     id = rs.getInt("participants_id");
@@ -345,7 +349,7 @@ public class Controller implements Initializable {
 
             }
             catch (SQLException e) {
-                System.out.println("adem :"+ e);
+                System.out.println("Err :"+ e);
                 //e.printStackTrace();
             }
         }
@@ -394,8 +398,6 @@ public class Controller implements Initializable {
             {
                 System.out.println("baliz, select event");
             }
-
-            System.out.println(event_combo_p.getValue());
         } catch (SQLException e) {
             System.out.println("Err : "+e);
         } catch (IOException e) {
@@ -555,7 +557,7 @@ public class Controller implements Initializable {
     /***************** Save Image ******************/
 
     private void saveToFile(ImageView i, String test) throws IOException {
-        File fo = new File("src/QRCode"+test+".png");
+        File fo = new File("src/QRCode/"+test+".png");
         //BufferedImage bi = SwingFXUtils.fromFXImage(i, null);
         BufferedImage bi = SwingFXUtils.fromFXImage(i.getImage(), null);
         ImageIO.write(bi, "png" , fo);
