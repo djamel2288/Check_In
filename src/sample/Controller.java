@@ -34,6 +34,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -42,6 +47,40 @@ import java.util.logging.Logger;
 import static sample.db.db_check_in.connect;
 
 public class Controller implements Initializable {
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        /**************** INITIALISATION ******************/
+
+        /******************* COMBOBOX *********************/
+
+        combo();
+
+        /******************* PANE ********************/
+
+        lbl_r.setVisible(false);
+        lbl_r1.setVisible(false);
+        participents_pan.setVisible(false);
+        emails_pan.setVisible(false);
+        events_pan.setVisible(false);
+
+        /**************** TABEL_CHECK_IN ******************/
+        update_table();
+
+
+        id_p.setCellValueFactory(new PropertyValueFactory<>("id_p"));
+
+        f_name_p.setCellValueFactory(new PropertyValueFactory<>("f_name_p"));
+
+        l_name_p.setCellValueFactory(new PropertyValueFactory<>("l_name_p"));
+
+        email_p.setCellValueFactory(new PropertyValueFactory<>("email_p"));
+
+        nbr_p_p.setCellValueFactory(new PropertyValueFactory<>("nbr_p_p"));
+
+        table.setItems(oblist);
+    }
 
     /**************** PANE ******************/
 
@@ -106,40 +145,7 @@ public class Controller implements Initializable {
     public ComboBox event_combo, event_combo_p;
 
 
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        /**************** INITIALISATION ******************/
-
-        /******************* COMBOBOX *********************/
-
-        combo();
-
-        /******************* PANE ********************/
-
-        lbl_r.setVisible(false);
-        lbl_r1.setVisible(false);
-        participents_pan.setVisible(false);
-        emails_pan.setVisible(false);
-        events_pan.setVisible(false);
-
-        /**************** TABEL_CHECK_IN ******************/
-        update_table();
-
-
-        id_p.setCellValueFactory(new PropertyValueFactory<>("id_p"));
-
-        f_name_p.setCellValueFactory(new PropertyValueFactory<>("f_name_p"));
-
-        l_name_p.setCellValueFactory(new PropertyValueFactory<>("l_name_p"));
-
-        email_p.setCellValueFactory(new PropertyValueFactory<>("email_p"));
-
-        nbr_p_p.setCellValueFactory(new PropertyValueFactory<>("nbr_p_p"));
-
-        table.setItems(oblist);
-    }
+    /************************ Table Search ***************************/
 
     @FXML
     public void searchT(){
@@ -149,19 +155,19 @@ public class Controller implements Initializable {
                 if(newValue.isEmpty() || newValue==null){
                     return true;
                 }
-                if(mt.getF_name_p().contains(newValue))
+                if(mt.getF_name_p().toLowerCase().contains(newValue))
                 {
                     return true;
                 }
-                if(mt.getL_name_p().contains(newValue)){
+                if(mt.getL_name_p().toLowerCase().contains(newValue)){
                     return true;
                 }
-                if(mt.getEmail_p().contains(newValue)){
+                if(mt.getEmail_p().toLowerCase().contains(newValue)){
                     return true;
                 }
 
                 String str = String.valueOf(mt.getId_p());
-                if(mt.getEmail_p().contains(newValue)){
+                if(str.toLowerCase().contains(newValue)){
                     return true;
                 }
                 return false;
@@ -175,31 +181,35 @@ public class Controller implements Initializable {
 
     }
 
+    /************************ Put Event Into Comboboxs ***************************/
+
     public void combo()
     {
-        Connection conn = null;
-        try {
-            conn = db_check_in.connect();
-        }
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        String req = "select event_name from events";
-        String event_name;
-        try {
-            st = conn.createStatement();
-            rs = st.executeQuery(req);
-
-            while (rs.next())
-            {
-                event_name = rs.getString("event_name");
-                event_combo.getItems().add(event_name);
-                event_combo_p.getItems().add(event_name);
+        if ((event_combo_p.getItems().isEmpty()) && (event_combo.getItems().isEmpty())){
+            Connection conn = null;
+            try {
+                conn = db_check_in.connect();
             }
+            catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            String req = "select event_name from events";
+            String event_name;
+            try {
+                st = conn.createStatement();
+                rs = st.executeQuery(req);
 
-        }
-        catch (SQLException e) {
-            System.out.println("err : "+ e);
+                while (rs.next())
+                {
+                    event_name = rs.getString("event_name");
+                    event_combo.getItems().add(event_name);
+                    event_combo_p.getItems().add(event_name);
+                }
+
+            }
+            catch (SQLException e) {
+                System.out.println("err : "+ e);
+            }
         }
     }
 
@@ -247,8 +257,6 @@ public class Controller implements Initializable {
         String req = "select participants_id from participants where nom = '"+ nom +"' and prenom = '"+ prenom +"' and event_id ="+ getEvent_id(event);;
         int p_id = 0;
         try {
-            //conn.setAutoCommit(false);
-
             st = conn.createStatement();
             rs = st.executeQuery(req);
 
@@ -299,11 +307,6 @@ public class Controller implements Initializable {
     }
 
     /********************* Update Table View ***********************/
-
-    /*public void combo_event()
-    {
-        update_table();
-    }*/
 
     public void update_table()
     {
@@ -380,13 +383,14 @@ public class Controller implements Initializable {
                     int test = st.executeUpdate(req);
                     if (test == 1){
                         qrbn();
+                        int participant_id = getParticipant_id(selected_event, nom, prenom);
                         System.out.println("Elhamdoulillah");
+                        saveToFile(qrView, ""+ participant_id + "_"+ selected_event + "_"+ nom +"_"+ prenom);
                         t_nom_p.setText("");
                         t_prenom_p.setText("");
                         t_email_p.setText("");
                         t_num_p.setText("");
                         update_table();
-                        saveToFile(qrView, ""+ selected_event + "_"+ nom +"_"+ prenom);
                     }
                 }
                 else
@@ -492,9 +496,9 @@ public class Controller implements Initializable {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             String myWeb = "Bismiallah";
             //myWeb = txt.getText();
-            myWeb = "EVENT : "+ event +"  |  " +
-                    "ID : "+ id_p +"  |  " +
-                    "NOM : "+ nom +"  |  " +
+            myWeb = "ID : "+ id_p +"  |  \n" +
+                    "EVENT :  "+ event +"  |  \n" +
+                    "NOM : "+ nom +"  |  \n" +
                     "PRENOM : "+ prenom;
             int width = 300;
             int height = 300;
@@ -604,6 +608,21 @@ public class Controller implements Initializable {
             } else {
                 System.out.println("Decoded text = " + decodedText);
 
+                /**************** Put The OutPut of the QrCode into textView *****************/
+                String s = decodedText;
+                //String[] words = s.split("\\|");
+                String[] id_info = s.split(" ");
+                System.out.println(id_info[2]);
+                searchF.setText(id_info[2]);
+                int participants_id = Integer.parseInt(id_info[2]);
+                System.out.println(participants_id);
+                try {
+                    check_in(participants_id);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                selectfromQR();
+
             }
         } catch (IOException e) {
             System.out.println("Could not decode QR Code, IOException :: " + e.getMessage());
@@ -650,27 +669,117 @@ public class Controller implements Initializable {
         Connection conn = null;
         try {
             conn = db_check_in.connect();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        int id, nbr;
+        String req = "select * from participants where participants_id = "+searchF.getText();
+        String f_name, l_name, email;
+        try {
+
+            st = conn.createStatement();
+            rs = st.executeQuery(req);
+            oblist.clear();
+            while (rs.next())
+            {
+
+                nbr = rs.getInt("nbr_presence");
+                id = rs.getInt("participants_id");
+                f_name = rs.getString("nom");
+                l_name = rs.getString("prenom");
+                email = rs.getString("email");
+                //nbr = rs.getInt("nbr_presence");
+
+                oblist.add(new ModelTable(
+                                id,
+                                f_name,
+                                l_name,
+                                email,
+                                nbr
+                        )
+                );
+            }
+
+        }
+        catch (SQLException e) {
+            System.out.println("Err :"+ e);
+        }
+    }
+
+    /******************** CHECK_IN *********************/
+
+    public void check_in(int participants_id) throws SQLException {
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        //int participants_id = 15;
+        int nbr_participation = 0;
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+
+        String today = dateFormat.format(cal.getTime());
+        try {
+            conn = connect();
+            String query = "insert into check_in (today, participants_id) values(?, ?)";
+
+            pstmt = conn.prepareStatement(query); // create a statement
+            pstmt.setDate(1, java.sql.Date.valueOf(today)); // set input parameter 1
+            pstmt.setInt(2, participants_id); // set input parameter 2
+            pstmt.executeUpdate(); // execute insert statement
+        } catch (Exception e) {
+            System.out.println("Err : "+e);
+        } finally {
+            pstmt.close();
+            conn.close();
+        }
+
+        /****************** Get Nbr of Participation *******************/
+        //Connection conn = null;
+        try {
+            conn = db_check_in.connect();
         }
         catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String req = "select * from participants where participants_id = 15";
-        String event_name;
+        String req1 = "select count(*) as nbr from check_in where check_in.participants_id = "+participants_id;
         try {
             st = conn.createStatement();
-            rs = st.executeQuery(req);
+            rs = st.executeQuery(req1);
 
             while (rs.next())
             {
-                event_name = rs.getString("event_nname");
-                event_combo.getItems().add(event_name);
-                event_combo_p.getItems().add(event_name);
+                nbr_participation = rs.getInt("nbr");
+                System.out.println("test : "+ nbr_participation);
             }
 
         }
         catch (SQLException e) {
             System.out.println("err : "+ e);
         }
+
+        /****************** Update Participation nbr *******************/
+
+
+        try {
+            conn = connect();
+            String query = "update participants set nbr_presence=? where participants_id ="+participants_id;
+
+            pstmt = conn.prepareStatement(query); // create a statement
+            pstmt.setInt(1, nbr_participation); // set input parameter 2
+            pstmt.executeUpdate(); // execute insert statement
+            System.out.println("elhamdoulillah");
+        } catch (Exception e) {
+            System.out.println("Err : "+e.getMessage());
+            //e.getMessage();
+        } finally {
+            pstmt.close();
+            conn.close();
+        }
+
+
     }
 
     /******************* VideoTacker Class ********************/

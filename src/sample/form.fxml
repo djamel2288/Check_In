@@ -162,7 +162,7 @@
               </columns>
             </TableView>
             <Button layoutX="882.0" layoutY="518.0" mnemonicParsing="false" onAction="#btnScan" prefHeight="44.0" prefWidth="59.0" text="Scane" />
-            <TextField fx:id="searchF" layoutX="803.0" layoutY="129.0" onAction="#searchT" onKeyReleased="#searchT" prefHeight="33.0" prefWidth="219.0" promptText="search" />
+            <TextField fx:id="searchF" layoutX="803.0" layoutY="129.0" onAction="#searchT" onInputMethodTextChanged="#searchT" onKeyReleased="#searchT" prefHeight="33.0" prefWidth="219.0" promptText="search" />
             <ComboBox fx:id="event_combo" layoutX="803.0" layoutY="196.0" onAction="#update_table" prefHeight="29.0" prefWidth="219.0" />
             <Button layoutX="964.0" layoutY="519.0" mnemonicParsing="false" onAction="#btnCapture" prefHeight="44.0" prefWidth="59.0" text="Clouse" />
             <ImageView fx:id="imageView" fitHeight="218.0" fitWidth="218.0" layoutX="804.0" layoutY="263.0" pickOnBounds="true" preserveRatio="true">
