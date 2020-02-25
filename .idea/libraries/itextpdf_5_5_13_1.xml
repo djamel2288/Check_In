@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="slf4j-api-1.7.2">
+  <library name="itextpdf-5.5.13.1">
     <CLASSES>
-      <root url="jar://D:/Java/jar_files_New1/slf4j-api-1.7.2.jar!/" />
+      <root url="jar://D:/Java/ItextPDF/itextpdf-5.5.13.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

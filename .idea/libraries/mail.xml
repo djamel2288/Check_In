@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="fontawesomefx-8.9">
+  <library name="mail">
     <CLASSES>
-      <root url="jar://D:/Java/jar_files/fontawesomefx-8.9.jar!/" />
+      <root url="jar://D:/Java/mailactivation/mail.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

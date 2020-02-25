@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="javase-3.3.0">
+  <library name="activation">
     <CLASSES>
-      <root url="jar://D:/Java/javase-3.3.0.jar!/" />
+      <root url="jar://D:/Java/mailactivation/activation.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,0 +1,119 @@
+#checkin_btn:hover,
+#emails_btn:hover,
+#events_btn:hover,
+#participents_btn:hover{
+    -fx-background-color:  #9b9ea3;
+    -fx-text-fill: #fff;
+}
+
+#checkin_btn,
+#emails_btn,
+#events_btn,
+#participents_btn{
+    -fx-background-color:  #575759;
+    -fx-text-fill: #c4c0c0;
+    -fx-font: normal bold 18px 'sans-serif';
+}
+
+
+#QRCode,
+#pdf,
+#email,
+#clouseCam,
+#scaneCode,
+#openCam,
+#add_p,
+#add_e,
+#update_e,
+#update_p,
+#delete_e,
+#delete_p{
+    -fx-background-repeat: no-repeat;
+    -fx-background-color:  #3085db;
+    -fx-background-position: center;
+    -fx-background-size: 50%;
+}
+
+#QRCode:hover,
+#pdf:hover,
+#email:hover,
+#clouseCam:hover,
+#scaneCode:hover,
+#openCam:hover,
+#add_p:hover,
+#add_e:hover,
+#update_e:hover,
+#update_p:hover,
+#delete_e:hover,
+#delete_p:hover
+{
+    -fx-background-color:  #136FCB;
+}
+
+#QRCode:pressed,
+#pdf:pressed,
+#email:pressed,
+#clouseCam:pressed,
+#scaneCode:pressed,
+#openCam:pressed,
+#add_p:pressed,
+#add_e:pressed,
+#update_e:pressed,
+#update_p:pressed,
+#delete_e:pressed,
+#delete_p:pressed{
+    -fx-background-color:  #6BA2DB ;
+}
+
+#QRCode
+{
+    -fx-background-image: url("assets/QRCode.png");
+}
+
+#pdf{
+    -fx-background-image: url("assets/file-pdf.png");
+}
+
+#email{
+    -fx-background-image: url("assets/email.png");
+}
+
+#clouseCam
+{
+    -fx-background-image: url("assets/shutdown_w.png");
+}
+
+#scaneCode{
+    -fx-background-image: url("assets/qr_code_w.png");
+}
+
+#openCam{
+    -fx-background-image: url("assets/camera_w.png");
+}
+
+#add_e
+{
+    -fx-background-image: url("assets/darAdd.png");
+}
+
+#update_e{
+    -fx-background-image: url("assets/darUpdate.png");
+}
+
+#delete_e{
+    -fx-background-image: url("assets/darDelete.png");
+}
+
+#add_p
+{
+    -fx-background-image: url("assets/userAdd.png");
+}
+
+#delete_p{
+    -fx-background-image: url("assets/userDelete.png");
+}
+
+#update_p{
+    -fx-background-image: url("assets/userUpdate.png");
+}
+
