@@ -708,8 +708,8 @@ public class Controller implements Initializable {
 
     /*********************** send emails ***********************/
     public void prepar_emails(String email, String pdf) throws Exception{
-        final String username = "djameleddine0822@gmail.com"; //ur email
-        final String password = "2703djmmm";
+        final String username = "email@gmail.com"; //ur email
+        final String password = "password";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", true);
@@ -726,7 +726,7 @@ public class Controller implements Initializable {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("djameleddine0822@gmail.com"));//ur email
+            message.setFrom(new InternetAddress("email@gmail.com"));//ur email
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));//u will send to
             String subject = "you have been accepted to join to our event";
